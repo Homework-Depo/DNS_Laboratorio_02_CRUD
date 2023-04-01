@@ -70,6 +70,30 @@ app.post('/eliminar/', async (req, res,) => {
   res.redirect('/');
 });
 
+app.get('/editar/:id', async (req, res) => {
+  const contact = await prisma.contact.findUnique({
+    where: {
+      id: parseInt(req.params.id)
+    }
+  });
+  res.render('edit', {contact: contact});
+});
+
+app.post('/editar', async (req, res) => {
+  await prisma.contact.update({
+    where: {
+      id: parseInt(req.body.inputId),
+    },
+    data: {
+      name: req.body.inputName,
+      lastName: req.body.inputLastName,
+      number: parseInt(req.body.inputNumber),
+      email: req.body.inputEmail
+    },
+  });
+  res.redirect('/');
+});
+
 app.listen(port, () => {
   console.log(`Servidor iniciado en: http://localhost:${port}`);
 });
