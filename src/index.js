@@ -29,8 +29,36 @@ app.get('/registrarse', (req, res) => {
   res.render('register');
 });
 
+app.post('/registrarse', async (req, res) => {
+
+  await prisma.user.create({
+    data: {
+      email: req.body.inputEmail,
+      password: req.body.inputPassword,
+      name: req.body.inputName,
+      lastName: req.body.inputLastName
+    }
+  });
+  res.redirect('/');
+});
+
 app.get('/ingresar', (req, res) => {
   res.render('login');
+});
+
+app.post('/ingresar', async (req, res) => {
+  const user = await prisma.user.findFirst({
+    where: {
+      email: req.body.inputEmail,
+      password: req.body.inputPassword
+    },
+  })
+
+  if (user) {
+    res.redirect('/')
+  } else {
+    res.redirect('/ingresar');
+  }
 });
 
 app.post('/eliminar/', async (req, res,) => {
