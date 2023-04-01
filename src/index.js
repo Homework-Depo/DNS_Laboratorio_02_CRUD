@@ -61,6 +61,22 @@ app.post('/ingresar', async (req, res) => {
   }
 });
 
+app.get('/crear', (req, res) => {
+  res.render('create');
+});
+
+app.post('/crear', async (req, res) => {
+  await prisma.contact.create({
+    data: {
+      name: req.body.inputName,
+      lastName: req.body.inputLastName,
+      number: parseInt(req.body.inputNumber),
+      email: req.body.inputEmail
+    }
+  });
+  res.redirect('/');
+});
+
 app.post('/eliminar/', async (req, res,) => {
   await prisma.contact.delete({
     where: {
